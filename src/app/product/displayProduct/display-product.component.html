@@ -1,0 +1,105 @@
+<div class="container ">
+
+    <ol class="breadcrumb" style="margin-top: 80px;">
+        <li><a [routerLink]="['']">Home</a></li>
+        <li><a [routerLink]="['/product']" class="active">Product</a></li>
+    </ol>
+
+
+    <input type="text" [(ngModel)]="query" placeholder="Product Title" class="form-control">
+    <table class="table table-striped">
+        <caption> </caption>
+        <thead>
+        <tr>
+
+            <td><strong>Id</strong></td>
+            <td><strong>Title</strong></td>
+            <td><strong>Price</strong></td>
+            <td><strong>Action</strong></td>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of products | filterByTitlePipe: query">
+            <td>{{product.id}}</td>
+            <td>{{product.title}}</td>
+            <td>{{product.price}}</td>
+            <td>
+                <button type="button" class="btn btn-danger" aria-label="Left Align" (click)="deleteProduct(product.id)">
+                    <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+                </button>
+
+                <button type="button" class="btn btn-success" aria-label="Left Align" (click)="openAddProductModal()">
+                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                </button>
+
+                <button type="button" class="btn btn-info" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                </button>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+<div bsModal #addProduct="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" [config]="{backdrop: false}" >
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="dismissAddProductModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="title"> Create product </h4>
+            </div>
+            <div class="modal-body">
+                <form>
+
+                    <div class="form-group row">
+                        <div class="col-lg-4">
+                            <label>Title<b>*</b>
+                            </label>
+                            <br/>
+                            <input class="form-control" type="text" [(ngModel)]="product.title" required
+                                   #title="ngModel"
+                                   name="title">
+                            <div id="empty-title-alert" *ngIf="!title.valid && !title.pristine"
+                                 class="alert alert-danger">
+                                Title is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-lg-4">
+                            <label>Price<b>*</b>
+                            </label>
+                            <br/>
+                            <input class="form-control" type="text" [(ngModel)]="product.price" required
+                                   #price="ngModel"
+                                   name="price">
+                            <div id="empty-price-alert" *ngIf="!price.valid && !price.pristine"
+                                 class="alert alert-danger">
+                                Price is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <input id="submitCreateProductButton"
+                                   [disabled]="!title.valid || title.pristine "
+                                   class="btn btn-success"
+                                   type="button" value="Save"
+                                   (click)="saveProduct(product)">
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
